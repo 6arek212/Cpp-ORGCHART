@@ -7,6 +7,12 @@
 namespace ariel
 {
 
+    /**
+     * @brief Recives a Tree's root and a list , then filling the list with the tree data using a Pre-Order recurcive tree scan
+     *
+     * @param root
+     * @param list
+     */
     void preOrder(Node *root, std::vector<std::string> &list)
     {
         if (!root)
@@ -20,6 +26,12 @@ namespace ariel
         }
     }
 
+    /**
+     * @brief Recives a Tree's root and a list , then filling the list with the tree data in a bfs way (Level Order)
+     *
+     * @param root
+     * @param list
+     */
     void bfsOrder(Node *root, std::vector<std::string> &list)
     {
         list.clear();
@@ -40,6 +52,13 @@ namespace ariel
         }
     }
 
+    /**
+     * @brief Construct a new Iterator:: Iterator object and filling the list with the appropriate method
+     *
+     *
+     * @param root
+     * @param type
+     */
     Iterator::Iterator(Node *root, IteratorType type)
     {
         this->root = root;
@@ -132,6 +151,29 @@ namespace ariel
     std::ostream &operator<<(std::ostream &out, const OrgChart &org)
     {
 
+        std::queue<Node *> q;
+        q.push(org.root);
+
+        int currentLevel = 0;
+        while (!q.empty())
+        {
+            Node *p = q.front();
+
+            if (currentLevel != p->getLevel())
+            {
+                std::cout << std::endl
+                          << "------------" << std::endl;
+                currentLevel++;
+            }
+            std::cout << p->getData() << "           ";
+            for (Node *n : p->getSubs())
+            {
+                n->setLevel(p->getLevel() + 1);
+                q.push(n);
+            }
+            q.pop();
+        }
+
         return out;
     }
 
@@ -191,15 +233,17 @@ namespace ariel
      */
     OrgChart &OrgChart::add_sub(std::string input1, std::string input2)
     {
-        Node *p = findNode(this->root, input1);
-        if (p)
+        if (!root)
         {
-            p->addSub(input2);
+            throw std::invalid_argument("Error: there is no root yet !");
         }
-        else
+
+        Node *p = findNode(this->root, input1);
+        if (!p)
         {
             throw std::invalid_argument("Error: input1 node was not found !");
         }
+        p->addSub(input2);
         return *this;
     }
 
