@@ -207,7 +207,7 @@ namespace ariel
      * @param input
      * @return OrgChart&
      */
-    OrgChart &OrgChart::add_root(std::string input)
+    OrgChart &OrgChart::add_root(const std::string &input)
     {
         if (this->root)
         {
@@ -255,7 +255,7 @@ namespace ariel
      * @param input2
      * @return OrgChart&
      */
-    OrgChart &OrgChart::add_sub(std::string input1, std::string input2)
+    OrgChart &OrgChart::add_sub(const std::string &input1, const std::string &input2)
     {
         if (!root)
         {
