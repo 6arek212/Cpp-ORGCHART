@@ -43,7 +43,6 @@ int main()
   {
     cout << (*it) << " ";
   } // prints: VP_SW VP_BI CTO CFO COO CEO
-
   std::cout << std::endl;
 
   for (auto it = organization.begin_preorder(); it != organization.end_preorder(); ++it)
@@ -63,6 +62,5 @@ int main()
   {
     cout << it->size() << " ";
   } // prints: 3 3 3 3 5 5
-
   std::cout << std::endl;
 }
