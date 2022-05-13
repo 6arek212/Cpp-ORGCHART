@@ -31,6 +31,8 @@ int main()
        |                 |
        VP_SW             VP_BI
  */
+  std::cout << std::endl;
+
   for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it)
   {
     cout << (*it) << " ";
@@ -48,21 +50,19 @@ int main()
   {
     cout << (*it) << " ";
   } // prints: CEO CTO VP_SW CFO COO VP_BI
-
   std::cout << std::endl;
-  for (string element : organization)
+
+  for (std::string element : organization)
   { // this should work like level order
     cout << element << " ";
   } // prints: CEO CTO CFO COO VP_SW VP_BI
 
-
-    std::cout << std::endl;
+  std::cout << std::endl;
   // demonstrate the arrow operator:
   for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it)
   {
     cout << it->size() << " ";
   } // prints: 3 3 3 3 5 5
 
-    std::cout << std::endl;
-
+  std::cout << std::endl;
 }
