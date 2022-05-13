@@ -13,13 +13,13 @@ namespace ariel
      * @param root
      * @param list
      */
-    void preOrder(Node *root, std::vector<std::string> &list)
+    void preOrder(Node *root, std::vector<Node *> &list)
     {
         if (!root)
         {
             return;
         }
-        list.push_back(root->getData());
+        list.push_back(root);
         for (Node *p : root->getSubs())
         {
             preOrder(p, list);
@@ -32,7 +32,7 @@ namespace ariel
      * @param root
      * @param list
      */
-    void bfsOrder(Node *root, std::vector<std::string> &list)
+    void bfsOrder(Node *root, std::vector<Node *> &list)
     {
         list.clear();
         std::queue<Node *> q;
@@ -42,7 +42,7 @@ namespace ariel
         while (!q.empty())
         {
             Node *p = q.front();
-            list.push_back(p->getData());
+            list.push_back(p);
             for (Node *n : p->getSubs())
             {
                 n->setLevel(p->getLevel() + 1);
@@ -50,6 +50,35 @@ namespace ariel
             }
             q.pop();
         }
+    }
+
+    /**
+     * @brief Recives a Tree's root and a list , then filling the list with the tree data in a reveresed bfs way (Reversed Level Order)
+     *
+     * @param root
+     * @param list
+     */
+    void bfsOrderReversed(Node *root, std::vector<Node *> &list)
+    {
+        bfsOrder(root, list);
+        std::vector<Node *> ll2;
+        std::vector<Node *> ll3;
+        int currentLevel = -1;
+        for (int i = list.size() - 1; i >= 0; i--)
+        {
+            if (currentLevel == -1 || currentLevel != list[(size_t)i]->getLevel())
+            {
+                if (currentLevel != -1)
+                {
+                    ll3.insert(ll3.end(), ll2.begin(), ll2.end());
+                }
+                currentLevel = list[(size_t)i]->getLevel();
+                ll2.clear();
+            }
+            ll2.insert(ll2.begin(), list[(size_t)i]);
+        }
+        ll3.insert(ll3.end(), ll2.begin(), ll2.end());
+        list = ll3;
     }
 
     /**
@@ -71,13 +100,17 @@ namespace ariel
                 bfsOrder(root, this->list);
                 break;
             case LevelOrderReversed:
-                bfsOrder(root, this->list);
-                std::reverse(this->list.begin(), this->list.end());
+                bfsOrderReversed(root, this->list);
                 break;
             case PreOrder:
                 preOrder(root, this->list);
                 break;
             default:;
+            }
+
+            if (this->list.empty())
+            {
+                this->root = NULL;
             }
         }
     }
@@ -150,15 +183,13 @@ namespace ariel
 
     std::ostream &operator<<(std::ostream &out, const OrgChart &org)
     {
-
-        std::queue<Node *> q;
-        q.push(org.root);
+        std::vector<Node *> ll;
+        bfsOrder(org.root, ll);
 
         int currentLevel = 0;
-        while (!q.empty())
+        for (auto it = ll.begin(); it != ll.end(); ++it)
         {
-            Node *p = q.front();
-
+            Node *p = *it;
             if (currentLevel != p->getLevel())
             {
                 std::cout << std::endl
@@ -166,14 +197,7 @@ namespace ariel
                 currentLevel++;
             }
             std::cout << p->getData() << "           ";
-            for (Node *n : p->getSubs())
-            {
-                n->setLevel(p->getLevel() + 1);
-                q.push(n);
-            }
-            q.pop();
         }
-
         return out;
     }
 

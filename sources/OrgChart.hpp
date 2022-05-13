@@ -17,7 +17,7 @@ namespace ariel
             this->data = data;
             this->level = 0;
         }
-        std::string getData() { return data; }
+        std::string &getData() { return data; }
         std::vector<Node *> &getSubs() { return this->subs; }
         void addSub(std::string &input) { subs.push_back(new Node(input)); }
         void setLevel(int l) { this->level = l; }
@@ -37,7 +37,7 @@ namespace ariel
     {
     private:
         Node *root;
-        std::vector<std::string> list;
+        std::vector<Node *> list;
         size_t index;
 
     public:
@@ -57,12 +57,12 @@ namespace ariel
 
         std::string operator*()
         {
-            return list[index];
+            return list[index]->getData();
         }
 
-        std::string* operator->()
+        std::string *operator->()
         {
-            return &list[index];
+            return &(list[index]->getData());
         }
 
         bool operator!=(const Iterator &it) const
