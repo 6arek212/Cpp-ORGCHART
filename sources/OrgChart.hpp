@@ -19,7 +19,7 @@ namespace ariel
         }
         std::string &getData() { return data; }
         std::vector<Node *> &getSubs() { return this->subs; }
-        void addSub(const std::string &input) { subs.push_back(new Node(input)); }
+        void addSub(Node *p) { subs.push_back(p); }
         void setLevel(int l) { this->level = l; }
         int getLevel() const { return this->level; }
         int size() const { return subs.size(); }
@@ -76,18 +76,23 @@ namespace ariel
     {
     private:
         Node *root;
-        static Node *findNode(Node *p, std::string data);
+        int size;
+        static Node *findNode(Node *p, const std::string &data);
         static void clearTree(Node *root);
 
     public:
-        OrgChart() { root = NULL; };
+        OrgChart()
+        {
+            root = NULL;
+            size = 0;
+        };
         ~OrgChart() { clearTree(root); };
         OrgChart &add_root(const std::string &input);
-        OrgChart &add_sub(const std::string &input1,const std::string &input2);
+        OrgChart &add_sub(const std::string &input1, const std::string &input2);
         Iterator begin_level_order() const;
         Iterator end_level_order() const;
         Iterator begin_reverse_order() const;
-        Iterator end_reverse_order() const;
+        Iterator reverse_order() const;
         Iterator begin_preorder() const;
         Iterator end_preorder() const;
         Iterator begin() const;

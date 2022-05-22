@@ -15,7 +15,7 @@ namespace ariel
      */
     void preOrder(Node *root, std::vector<Node *> &list)
     {
-        if (!root)
+        if (root == NULL)
         {
             return;
         }
@@ -64,7 +64,7 @@ namespace ariel
         std::vector<Node *> ll2;
         std::vector<Node *> ll3;
         int currentLevel = -1;
-        for (int i = list.size() - 1; i >= 0; i--)
+        for (int i = (int)list.size() - 1; i >= 0; i--)
         {
             if (currentLevel == -1 || currentLevel != list[(size_t)i]->getLevel())
             {
@@ -123,7 +123,7 @@ namespace ariel
 
     void OrgChart::clearTree(Node *root)
     {
-        if (!root)
+        if (root == NULL)
         {
             return;
         }
@@ -143,41 +143,73 @@ namespace ariel
      */
     Iterator OrgChart::begin() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(root, LevelOrder);
     }
 
     Iterator OrgChart::end() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(NULL);
     }
 
     Iterator OrgChart::begin_preorder() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(root, PreOrder);
     }
 
     Iterator OrgChart::end_preorder() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(NULL);
     }
 
     Iterator OrgChart::begin_reverse_order() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(root, LevelOrderReversed);
     }
 
-    Iterator OrgChart::end_reverse_order() const
+    Iterator OrgChart::reverse_order() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(NULL);
     }
 
     Iterator OrgChart::begin_level_order() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(root, LevelOrder);
     }
 
     Iterator OrgChart::end_level_order() const
     {
+        if (this->size == 0)
+        {
+            throw std::invalid_argument("Chart is empty");
+        }
         return Iterator(NULL);
     }
 
@@ -209,11 +241,25 @@ namespace ariel
      */
     OrgChart &OrgChart::add_root(const std::string &input)
     {
-        if (this->root)
+        if (input.empty())
         {
-            clearTree(root);
+            throw std::invalid_argument("Cannt add an empty string data!");
         }
+
+        if (this->root != NULL)
+        {
+            Node *p = new Node(input);
+            for (Node *n : this->root->getSubs())
+            {
+                p->addSub(n);
+            }
+            delete this->root;
+            this->root = p;
+            return *this;
+        }
+
         this->root = new Node(input);
+        size++;
         return *this;
     }
 
@@ -224,9 +270,9 @@ namespace ariel
      * @param data
      * @return Node*
      */
-    Node *OrgChart::findNode(Node *p, std::string data)
+    Node *OrgChart::findNode(Node *p, const std::string &data)
     {
-        if (!p)
+        if (p == NULL)
         {
             return NULL;
         }
@@ -257,17 +303,23 @@ namespace ariel
      */
     OrgChart &OrgChart::add_sub(const std::string &input1, const std::string &input2)
     {
-        if (!root)
+        if (root == NULL)
         {
             throw std::invalid_argument("Error: there is no root yet !");
         }
 
+        if (input2.empty())
+        {
+            throw std::invalid_argument("Cannt add an empty string data!");
+        }
+
         Node *p = findNode(this->root, input1);
-        if (!p)
+        if (p == NULL)
         {
             throw std::invalid_argument("Error: input1 node was not found !");
         }
-        p->addSub(input2);
+        p->addSub(new Node(input2));
+        size++;
         return *this;
     }
 
