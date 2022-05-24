@@ -17,6 +17,7 @@ namespace ariel
             this->data = data;
             this->level = 0;
         }
+
         std::string &getData() { return data; }
         std::vector<Node *> &getSubs() { return this->subs; }
         void addSub(Node *p) { subs.push_back(p); }
@@ -86,7 +87,12 @@ namespace ariel
             root = NULL;
             size = 0;
         };
+        OrgChart(OrgChart &org);
+        OrgChart(OrgChart &&org) noexcept;
         ~OrgChart() { clearTree(root); };
+        OrgChart &operator=(const OrgChart &org);
+        OrgChart &operator=(OrgChart &&org) noexcept;
+
         OrgChart &add_root(const std::string &input);
         OrgChart &add_sub(const std::string &input1, const std::string &input2);
         Iterator begin_level_order() const;
